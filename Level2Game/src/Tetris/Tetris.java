@@ -16,6 +16,7 @@ public class Tetris extends JFrame {
 		Board board = new Board(this);
 		add(board);
 		board.start();
+		board.playSound("tetristheme.mp3");
 
 		setSize(200, 400);
 		setTitle("Tetris");
@@ -27,6 +28,7 @@ public class Tetris extends JFrame {
 	}
 
 	public static void main(String[] args) {
+		
 
 		Tetris game = new Tetris();
 		game.setLocationRelativeTo(null);

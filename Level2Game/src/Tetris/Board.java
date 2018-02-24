@@ -1,5 +1,6 @@
 package Tetris;
 
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JApplet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -148,7 +150,11 @@ public class Board extends JPanel implements ActionListener {
 			newPiece();
 		}
 	}
-
+	public void playSound(String fileName) {
+		AudioClip sound = JApplet.newAudioClip(getClass().getResource(fileName));
+		sound.play();
+	}
+	
 	private void newPiece() {
 		curPiece.setRandomShape();
 		curX = BoardWidth / 2 + 1;
@@ -158,7 +164,7 @@ public class Board extends JPanel implements ActionListener {
 			curPiece.setShape(Tetrominoes.NoShape);
 			timer.stop();
 			isStarted = false;
-			statusbar.setText("You Really Are Trash!");
+			statusbar.setText("BAD! Score: " + String.valueOf(numLinesRemoved));
 		}
 	}
 

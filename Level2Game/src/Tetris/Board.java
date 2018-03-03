@@ -153,6 +153,7 @@ public class Board extends JPanel implements ActionListener {
 	public void playSound(String fileName) {
 		AudioClip sound = JApplet.newAudioClip(getClass().getResource(fileName));
 		sound.play();
+		System.out.println(fileName);
 	}
 	
 	private void newPiece() {

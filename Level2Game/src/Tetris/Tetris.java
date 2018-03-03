@@ -15,8 +15,8 @@ public class Tetris extends JFrame {
 		add(statusbar, BorderLayout.SOUTH);
 		Board board = new Board(this);
 		add(board);
+		board.playSound("../Tetris/batman.wav");
 		board.start();
-		board.playSound("tetristheme.mp3");
 
 		setSize(200, 400);
 		setTitle("Tetris");

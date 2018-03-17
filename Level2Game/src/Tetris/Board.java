@@ -8,7 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JApplet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +23,7 @@ public class Board extends JPanel implements ActionListener {
 
 	final int BoardWidth = 10;
 	final int BoardHeight = 22;
-
+	BufferedImage tetrisBackground;
 	Timer timer;
 	boolean isFallingFinished = false;
 	boolean isStarted = false;
@@ -34,6 +37,11 @@ public class Board extends JPanel implements ActionListener {
 
 	public Board(Tetris parent) {
 
+		try {
+			tetrisBackground = ImageIO.read(this.getClass().getResourceAsStream("TetrisLeft.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		setFocusable(true);
 		curPiece = new Shape();
 		timer = new Timer(400, this);
@@ -95,8 +103,9 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	public void paint(Graphics g) {
-		super.paint(g);
 
+		super.paint(g);
+		g.drawImage(tetrisBackground, 0, 0, 200, 400, null);
 		Dimension size = getSize();
 		int boardTop = (int) size.getHeight() - BoardHeight * squareHeight();
 
@@ -150,12 +159,13 @@ public class Board extends JPanel implements ActionListener {
 			newPiece();
 		}
 	}
+
 	public void playSound(String fileName) {
 		AudioClip sound = JApplet.newAudioClip(getClass().getResource(fileName));
 		sound.play();
 		System.out.println(fileName);
 	}
-	
+
 	private void newPiece() {
 		curPiece.setRandomShape();
 		curX = BoardWidth / 2 + 1;
@@ -200,6 +210,7 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			if (lineIsFull) {
+				playSound("../Tetris/LineClear.wav");
 				++numFullLines;
 				for (int k = i; k < BoardHeight - 1; ++k) {
 					for (int j = 0; j < BoardWidth; ++j)
@@ -213,6 +224,7 @@ public class Board extends JPanel implements ActionListener {
 			statusbar.setText(String.valueOf(numLinesRemoved));
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
+			Tetris.label.setText(String.valueOf(numFullLines));
 			repaint();
 		}
 	}

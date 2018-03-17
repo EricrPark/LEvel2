@@ -8,19 +8,21 @@ import javax.swing.JLabel;
 public class Tetris extends JFrame {
 
 	JLabel statusbar;
+	static JLabel label;
 
 	public Tetris() {
 
 		statusbar = new JLabel(" 0");
 		add(statusbar, BorderLayout.SOUTH);
 		Board board = new Board(this);
-		add(board);
-		board.playSound("../Tetris/batman.wav");
-		board.start();
-
+		board.playSound("../Tetris/tetristheme (1).wav");
 		setSize(200, 400);
 		setTitle("Tetris");
+		add(board);
+		label = new JLabel();
+		add(label, BorderLayout.CENTER);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		board.start();
 	}
 
 	public JLabel getStatusBar() {
@@ -28,7 +30,6 @@ public class Tetris extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		
 
 		Tetris game = new Tetris();
 		game.setLocationRelativeTo(null);

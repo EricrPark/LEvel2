@@ -221,10 +221,9 @@ public class Board extends JPanel implements ActionListener {
 
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
-			statusbar.setText(String.valueOf(numLinesRemoved));
+			statusbar.setText(numLinesRemoved+"");
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
-			Tetris.label.setText(String.valueOf(numFullLines));
 			repaint();
 		}
 	}

@@ -1,28 +1,35 @@
 package Tetris;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Tetris extends JFrame {
 
 	JLabel statusbar;
-	static JLabel label;
+	JPanel panel;
 
 	public Tetris() {
-
-		statusbar = new JLabel(" 0");
-		add(statusbar, BorderLayout.SOUTH);
 		Board board = new Board(this);
 		board.playSound("../Tetris/tetristheme (1).wav");
-		setSize(200, 400);
+		setSize(400, 400);
 		setTitle("Tetris");
-		add(board);
-		label = new JLabel();
-		add(label, BorderLayout.CENTER);
+		board.setPreferredSize(new Dimension(200, 400));
+		add(board, BorderLayout.NORTH);
+		statusbar = new JLabel(" 0");
+		add(statusbar, BorderLayout.SOUTH);
+		Board board2 = new Board(this);
+		board2.setPreferredSize(new Dimension(200, 400));
+		add(board2, BorderLayout.NORTH);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLayout(new GridLayout(1,2));
+		pack();
 		board.start();
+		board2.start();
 	}
 
 	public JLabel getStatusBar() {

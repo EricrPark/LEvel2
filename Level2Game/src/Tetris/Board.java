@@ -21,6 +21,7 @@ import Tetris.Shape.Tetrominoes;
 
 public class Board extends JPanel implements ActionListener {
 
+	int controls;
 	final int BoardWidth = 10;
 	final int BoardHeight = 22;
 	BufferedImage tetrisBackground;
@@ -34,9 +35,11 @@ public class Board extends JPanel implements ActionListener {
 	JLabel statusbar;
 	Shape curPiece;
 	Tetrominoes[] board;
+	Tetris parent;
 
-	public Board(Tetris parent) {
-
+	public Board(Tetris parent, int controls) {
+		this.controls = controls;
+		this.parent = parent;
 		try {
 			tetrisBackground = ImageIO.read(this.getClass().getResourceAsStream("TetrisLeft.png"));
 		} catch (IOException e) {
@@ -44,10 +47,11 @@ public class Board extends JPanel implements ActionListener {
 		}
 		setFocusable(true);
 		curPiece = new Shape();
-		timer = new Timer(400, this);
+		timer = new Timer(300, this);
 		timer.start();
 
 		statusbar = parent.getStatusBar();
+
 		board = new Tetrominoes[BoardWidth * BoardHeight];
 		addKeyListener(new TAdapter());
 		clearBoard();
@@ -172,11 +176,15 @@ public class Board extends JPanel implements ActionListener {
 		curY = BoardHeight - 1 + curPiece.minY();
 
 		if (!tryMove(curPiece, curX, curY)) {
-			curPiece.setShape(Tetrominoes.NoShape);
-			timer.stop();
-			isStarted = false;
-			statusbar.setText("BAD! Score: " + String.valueOf(numLinesRemoved));
+			parent.stopGame();
+			parent.setBadScore();
 		}
+	}
+
+	public void stopGame() {
+		curPiece.setShape(Tetrominoes.NoShape);
+		timer.stop();
+		isStarted = false;
 	}
 
 	private boolean tryMove(Shape newPiece, int newX, int newY) {
@@ -221,7 +229,8 @@ public class Board extends JPanel implements ActionListener {
 
 		if (numFullLines > 0) {
 			numLinesRemoved += numFullLines;
-			statusbar.setText(numLinesRemoved+"");
+			System.out.println(statusbar);
+			parent.increaseScore();
 			isFallingFinished = true;
 			curPiece.setShape(Tetrominoes.NoShape);
 			repaint();
@@ -255,7 +264,7 @@ public class Board extends JPanel implements ActionListener {
 			}
 
 			int keycode = e.getKeyCode();
-
+			System.out.println(controls);
 			if (keycode == 'p' || keycode == 'P') {
 				pause();
 				return;
@@ -263,29 +272,55 @@ public class Board extends JPanel implements ActionListener {
 
 			if (isPaused)
 				return;
-
-			switch (keycode) {
-			case KeyEvent.VK_LEFT:
-				tryMove(curPiece, curX - 1, curY);
-				break;
-			case KeyEvent.VK_RIGHT:
-				tryMove(curPiece, curX + 1, curY);
-				break;
-			case KeyEvent.VK_DOWN:
-				tryMove(curPiece.rotateRight(), curX, curY);
-				break;
-			case KeyEvent.VK_UP:
-				tryMove(curPiece.rotateLeft(), curX, curY);
-				break;
-			case KeyEvent.VK_SPACE:
-				dropDown();
-				break;
-			case 'd':
-				oneLineDown();
-				break;
-			case 'D':
-				oneLineDown();
-				break;
+			if (controls == 0) {
+				switch (keycode) {
+				case KeyEvent.VK_LEFT:
+					tryMove(curPiece, curX - 1, curY);
+					break;
+				case KeyEvent.VK_RIGHT:
+					tryMove(curPiece, curX + 1, curY);
+					break;
+				case KeyEvent.VK_DOWN:
+					tryMove(curPiece.rotateRight(), curX, curY);
+					break;
+				case KeyEvent.VK_UP:
+					tryMove(curPiece.rotateLeft(), curX, curY);
+					break;
+				case KeyEvent.VK_SPACE:
+					dropDown();
+					break;
+				case 'm':
+					oneLineDown();
+					break;
+				case 'M':
+					oneLineDown();
+					break;
+				}
+			}
+			if (controls == 1) {
+				switch (keycode) {
+				case KeyEvent.VK_A:
+					tryMove(curPiece, curX - 1, curY);
+					break;
+				case KeyEvent.VK_D:
+					tryMove(curPiece, curX + 1, curY);
+					break;
+				case KeyEvent.VK_S:
+					tryMove(curPiece.rotateRight(), curX, curY);
+					break;
+				case KeyEvent.VK_W:
+					tryMove(curPiece.rotateLeft(), curX, curY);
+					break;
+				case KeyEvent.VK_Q:
+					dropDown();
+					break;
+				case 'r':
+					oneLineDown();
+					break;
+				case 'R':
+					oneLineDown();
+					break;
+				}
 			}
 
 		}

@@ -20,7 +20,8 @@ import javax.swing.Timer;
 import Tetris.Shape.Tetrominoes;
 
 public class Board extends JPanel implements ActionListener {
-
+	
+	TAdapter adapter;
 	int controls;
 	final int BoardWidth = 10;
 	final int BoardHeight = 22;
@@ -51,9 +52,9 @@ public class Board extends JPanel implements ActionListener {
 		timer.start();
 
 		statusbar = parent.getStatusBar();
-
+		adapter = parent.getInput();
 		board = new Tetrominoes[BoardWidth * BoardHeight];
-		addKeyListener(new TAdapter());
+		addKeyListener(adapter);
 		clearBoard();
 	}
 
@@ -91,7 +92,7 @@ public class Board extends JPanel implements ActionListener {
 		timer.start();
 	}
 
-	private void pause() {
+	public void pause() {
 		if (!isStarted)
 			return;
 
@@ -131,7 +132,7 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 
-	private void dropDown() {
+	public void dropDown() {
 		int newY = curY;
 		while (newY > 0) {
 			if (!tryMove(curPiece, curX, newY - 1))
@@ -141,7 +142,7 @@ public class Board extends JPanel implements ActionListener {
 		pieceDropped();
 	}
 
-	private void oneLineDown() {
+	public void oneLineDown() {
 		if (!tryMove(curPiece, curX, curY - 1))
 			pieceDropped();
 	}
@@ -187,7 +188,7 @@ public class Board extends JPanel implements ActionListener {
 		isStarted = false;
 	}
 
-	private boolean tryMove(Shape newPiece, int newX, int newY) {
+	public boolean tryMove(Shape newPiece, int newX, int newY) {
 		for (int i = 0; i < 4; ++i) {
 			int x = newX + newPiece.x(i);
 			int y = newY - newPiece.y(i);
@@ -256,73 +257,123 @@ public class Board extends JPanel implements ActionListener {
 		g.drawLine(x + squareWidth() - 1, y + squareHeight() - 1, x + squareWidth() - 1, y + 1);
 	}
 
-	class TAdapter extends KeyAdapter {
-		public void keyPressed(KeyEvent e) {
+	public int getControls() {
+		return controls;
+	}
 
-			if (!isStarted || curPiece.getShape() == Tetrominoes.NoShape) {
-				return;
-			}
+	public void setControls(int controls) {
+		this.controls = controls;
+	}
 
-			int keycode = e.getKeyCode();
-			System.out.println(controls);
-			if (keycode == 'p' || keycode == 'P') {
-				pause();
-				return;
-			}
+	public int getCurX() {
+		return curX;
+	}
 
-			if (isPaused)
-				return;
-			if (controls == 0) {
-				switch (keycode) {
-				case KeyEvent.VK_LEFT:
-					tryMove(curPiece, curX - 1, curY);
-					break;
-				case KeyEvent.VK_RIGHT:
-					tryMove(curPiece, curX + 1, curY);
-					break;
-				case KeyEvent.VK_DOWN:
-					tryMove(curPiece.rotateRight(), curX, curY);
-					break;
-				case KeyEvent.VK_UP:
-					tryMove(curPiece.rotateLeft(), curX, curY);
-					break;
-				case KeyEvent.VK_SPACE:
-					dropDown();
-					break;
-				case 'm':
-					oneLineDown();
-					break;
-				case 'M':
-					oneLineDown();
-					break;
-				}
-			}
-			if (controls == 1) {
-				switch (keycode) {
-				case KeyEvent.VK_A:
-					tryMove(curPiece, curX - 1, curY);
-					break;
-				case KeyEvent.VK_D:
-					tryMove(curPiece, curX + 1, curY);
-					break;
-				case KeyEvent.VK_S:
-					tryMove(curPiece.rotateRight(), curX, curY);
-					break;
-				case KeyEvent.VK_W:
-					tryMove(curPiece.rotateLeft(), curX, curY);
-					break;
-				case KeyEvent.VK_Q:
-					dropDown();
-					break;
-				case 'r':
-					oneLineDown();
-					break;
-				case 'R':
-					oneLineDown();
-					break;
-				}
-			}
+	public void setCurX(int curX) {
+		this.curX = curX;
+	}
 
-		}
+	public int getCurY() {
+		return curY;
+	}
+
+	public void setCurY(int curY) {
+		this.curY = curY;
+	}
+
+	public Shape getCurPiece() {
+		return curPiece;
+	}
+
+	public void setCurPiece(Shape curPiece) {
+		this.curPiece = curPiece;
+	}
+
+	public TAdapter getAdapter() {
+		return adapter;
+	}
+
+	public void setAdapter(TAdapter adapter) {
+		this.adapter = adapter;
+	}
+
+	public BufferedImage getTetrisBackground() {
+		return tetrisBackground;
+	}
+
+	public void setTetrisBackground(BufferedImage tetrisBackground) {
+		this.tetrisBackground = tetrisBackground;
+	}
+
+	public Timer getTimer() {
+		return timer;
+	}
+
+	public void setTimer(Timer timer) {
+		this.timer = timer;
+	}
+
+	public boolean isFallingFinished() {
+		return isFallingFinished;
+	}
+
+	public void setFallingFinished(boolean isFallingFinished) {
+		this.isFallingFinished = isFallingFinished;
+	}
+
+	public boolean isStarted() {
+		return isStarted;
+	}
+
+	public void setStarted(boolean isStarted) {
+		this.isStarted = isStarted;
+	}
+
+	public boolean isPaused() {
+		return isPaused;
+	}
+
+	public void setPaused(boolean isPaused) {
+		this.isPaused = isPaused;
+	}
+
+	public int getNumLinesRemoved() {
+		return numLinesRemoved;
+	}
+
+	public void setNumLinesRemoved(int numLinesRemoved) {
+		this.numLinesRemoved = numLinesRemoved;
+	}
+
+	public JLabel getStatusbar() {
+		return statusbar;
+	}
+
+	public void setStatusbar(JLabel statusbar) {
+		this.statusbar = statusbar;
+	}
+
+	public Tetrominoes[] getBoard() {
+		return board;
+	}
+
+	public void setBoard(Tetrominoes[] board) {
+		this.board = board;
+	}
+
+	public Tetris getParent() {
+		return parent;
+	}
+
+	public void setParent(Tetris parent) {
+		this.parent = parent;
+	}
+
+	public int getBoardWidth() {
+		return BoardWidth;
+	}
+
+	public int getBoardHeight() {
+		return BoardHeight;
 	}
 }

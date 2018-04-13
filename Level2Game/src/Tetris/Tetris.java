@@ -14,7 +14,7 @@ public class Tetris extends JFrame {
 	JPanel panel;
 	Board board;
 	Board board2;
-
+	TAdapter input;
 	public Tetris() {
 		statusbar = new JLabel(" 0");
 		board = new Board(this, 0);
@@ -30,8 +30,17 @@ public class Tetris extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new GridLayout(1, 2));
 		pack();
+		input = new TAdapter(board, board2);
 		board.start();
 		board2.start();
+	}
+
+	public TAdapter getInput() {
+		return input;
+	}
+
+	public void setInput(TAdapter input) {
+		this.input = input;
 	}
 
 	public void increaseScore() {

@@ -177,7 +177,7 @@ public class Board extends JPanel implements ActionListener {
 		curY = BoardHeight - 1 + curPiece.minY();
 
 		if (!tryMove(curPiece, curX, curY)) {
-			parent.stopGame();
+			parent.stopGame(this);
 			parent.setBadScore();
 		}
 	}

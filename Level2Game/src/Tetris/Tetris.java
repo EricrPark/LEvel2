@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Tetris extends JFrame {
@@ -15,6 +16,7 @@ public class Tetris extends JFrame {
 	Board board;
 	Board board2;
 	TAdapter input;
+
 	public Tetris() {
 		statusbar = new JLabel(" 0");
 		board = new Board(this, 0);
@@ -31,6 +33,7 @@ public class Tetris extends JFrame {
 		setLayout(new GridLayout(1, 2));
 		pack();
 		input = new TAdapter(board, board2);
+		board.addKeyListener(input);
 		board.start();
 		board2.start();
 	}
@@ -56,9 +59,19 @@ public class Tetris extends JFrame {
 		return statusbar;
 	}
 
-	public void stopGame() {
+	public void stopGame(Board b) {
 		board.stopGame();
 		board2.stopGame();
+		if(b.getControls()==0) {
+		JOptionPane.showMessageDialog(null, "The player on the Left side "
+				+ "screwed you up\n Your score is: " + String.valueOf(numLinesDestroyed));
+		System.exit(0);
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "The player on the Right  side "
+					+ "screwed you up\n Your score is: " + String.valueOf(numLinesDestroyed));
+			System.exit(0);
+		}
 	}
 
 	public static void main(String[] args) {

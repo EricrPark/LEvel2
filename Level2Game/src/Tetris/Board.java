@@ -37,10 +37,12 @@ public class Board extends JPanel implements ActionListener {
 	Shape curPiece;
 	Tetrominoes[] board;
 	Tetris parent;
-
+	float timeElapsed;
+	
 	public Board(Tetris parent, int controls) {
 		this.controls = controls;
 		this.parent = parent;
+		timeElapsed = 0;
 		try {
 			tetrisBackground = ImageIO.read(this.getClass().getResourceAsStream("TetrisLeft.png"));
 		} catch (IOException e) {
@@ -50,7 +52,7 @@ public class Board extends JPanel implements ActionListener {
 		curPiece = new Shape();
 		timer = new Timer(300, this);
 		timer.start();
-
+		
 		statusbar = parent.getStatusBar();
 		adapter = parent.getInput();
 		board = new Tetrominoes[BoardWidth * BoardHeight];
@@ -108,7 +110,10 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	public void paint(Graphics g) {
-
+		timeElapsed += 300;
+		if (timeElapsed % 84000 == 0) {
+			playSound("../Tetris/tetristheme (1).wav");
+		}
 		super.paint(g);
 		g.drawImage(tetrisBackground, 0, 0, 200, 400, null);
 		Dimension size = getSize();

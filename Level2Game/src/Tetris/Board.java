@@ -50,7 +50,7 @@ public class Board extends JPanel implements ActionListener {
 		}
 		setFocusable(true);
 		curPiece = new Shape();
-		timer = new Timer(300, this);
+		timer = new Timer(400, this);
 		timer.start();
 		
 		statusbar = parent.getStatusBar();
@@ -110,8 +110,8 @@ public class Board extends JPanel implements ActionListener {
 	}
 
 	public void paint(Graphics g) {
-		timeElapsed += 300;
-		if (timeElapsed % 84000 == 0) {
+		timeElapsed += 400;
+		if (timeElapsed % 86000 == 0) {
 			playSound("../Tetris/tetristheme (1).wav");
 		}
 		super.paint(g);
